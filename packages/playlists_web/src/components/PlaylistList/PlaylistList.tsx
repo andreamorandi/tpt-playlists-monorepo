@@ -19,7 +19,7 @@ const PlaylistList: FC = () => {
     );
 
     useEffect(() => {
-        if (!playlists.getIn(['data', 'data'])) dispatch(fetchPlaylists());
+        if (!playlists.getIn(['data', 'data']) && !playlists.get('error')) dispatch(fetchPlaylists());
     }, [playlists, dispatch]);
 
     let content: ReactNode;

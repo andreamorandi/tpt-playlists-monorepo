@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { persistReducer, persistStore, createTransform } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Action } from "redux";
 import { playlistsReducer } from "./slices/playlistsSlice";
 import { playlistDetailsReducer } from "./slices/playlistDetailsSlice";
@@ -47,7 +47,7 @@ const transform = createTransform(
 
 const persistConfig = {
   key: "root",
-  storage,
+  storage: AsyncStorage,
   transforms: [transform],
 };
 

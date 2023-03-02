@@ -16,11 +16,12 @@ const playlistDetailsSlice = createSlice({
     extraReducers(builder) {
         builder.addCase(fetchPlaylistDetails.pending, (state) => {
             return state.set('isLoading', true)
+            .set('error', null);
         });
         builder.addCase(fetchPlaylistDetails.fulfilled, (state, action: PayloadAction<PlaylistDetails>) => {
             return state
-                .set('isLoading', false)
-                .set('data', action.payload)
+            .set('isLoading', false)
+            .set('data', action.payload)
         });
         builder.addCase(fetchPlaylistDetails.rejected, (state, action) => {
             return state
