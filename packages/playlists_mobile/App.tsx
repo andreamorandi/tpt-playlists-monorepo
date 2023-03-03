@@ -2,7 +2,6 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import {Provider} from 'react-redux';
 import {store} from 'core/store/store';
-// import {selectPlaylists} from 'core/store/store';
 import {NavigationContainer, ParamListBase} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import PlaylistListScreen from './components/PlaylistListScreen/PlaylistListScreen';
@@ -22,7 +21,6 @@ const App = () => {
           initialRouteName="PlaylistScreen"
           screenOptions={{
             headerShown: false,
-            gestureDirection: 'horizontal-inverted',
           }}>
           <Stack.Screen
             name="PlaylistListScreen"

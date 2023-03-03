@@ -7,7 +7,6 @@ const apiUrl = 'https://api.deezer.com/playlist';
 
 const fetchPlaylistDetails = createAsyncThunk('playlistDetails/fetch', async (id: string) => {
 
-    // Request after running the following proxy package: https://github.com/Spicy-Sparks/cors
     const response = await axios.get<PlaylistDetails>(`${proxyUrl}/?${apiUrl}/${id}`);
 
     return response.data;

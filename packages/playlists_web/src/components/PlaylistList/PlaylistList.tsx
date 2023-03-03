@@ -19,11 +19,11 @@ const PlaylistList: FC = () => {
     );
 
     useEffect(() => {
-        if (!playlists.getIn(['data', 'data']) && !playlists.get('error')) dispatch(fetchPlaylists());
-    }, [playlists, dispatch]);
+        if (!playlists.data.data && !playlists.error) dispatch(fetchPlaylists());
+    }, [playlists.data.data, dispatch, playlists.error]);
 
     let content: ReactNode;
-    if (playlists.get('isLoading')) {
+    if (playlists.isLoading) {
         content = <div className="px-5 lg:px-10">
             <div className="flex justify-center gap-6 md:gap-10 mt-24">
                 <Skeleton times={4} className="h-32 w-32 md:h-52 md:w-52 lg:h-72 lg:w-72" />
@@ -32,11 +32,11 @@ const PlaylistList: FC = () => {
                 <Skeleton times={4} className="h-32 w-32 md:h-52 md:w-52 lg:h-72 lg:w-72" />
             </div>
         </div>;
-    } else if (playlists.get('error')) {
+    } else if (playlists.error) {
         content = <div>C'è stato un errore nel caricamento delle playlist.</div>;
-    } else if (playlists.getIn(['data', 'data'])) {
+    } else if (playlists.data.data) {
 
-        const playlistsData: Playlist[] = playlists.getIn(['data', 'data']) as Playlist[];
+        const playlistsData: Playlist[] = playlists.data.data as Playlist[];
         const playlistList: List<Playlist> = List(playlistsData);
         
         const midpoint = Math.ceil(playlistList.size / 2);

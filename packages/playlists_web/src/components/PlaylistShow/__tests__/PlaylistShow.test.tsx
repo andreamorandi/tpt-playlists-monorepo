@@ -4,7 +4,7 @@ import thunk from "redux-thunk";
 import { Provider } from "react-redux";
 import PlaylistShow from "../PlaylistShow";
 import { PlaylistDetailsState } from "core/types/playlistDetails";
-import { Map } from "immutable";
+import { SerializedError } from "@reduxjs/toolkit";
 
 jest.mock("react-router-dom", () => ({
     useParams: () => ({ id: "6045750124" })
@@ -17,11 +17,11 @@ describe("PlaylistShow", () => {
 
     it("renders 12 loading skeletons", () => {
         const store = mockStore({
-            playlistDetails: Map({
+            playlistDetails: {
                 isLoading: true,
                 data: {},
                 error: null
-            }) as PlaylistDetailsState,
+            } as PlaylistDetailsState,
         });
         render(
             <Provider store={store}>
@@ -34,11 +34,11 @@ describe("PlaylistShow", () => {
 
     it("renders a fetching error message", () => {
         const store = mockStore({
-            playlistDetails: Map({
+            playlistDetails: {
                 isLoading: false,
                 data: {},
-                error: true
-            }) as PlaylistDetailsState,
+                error: true as SerializedError
+            } as PlaylistDetailsState,
         });
         render(
             <Provider store={store}>
@@ -51,7 +51,7 @@ describe("PlaylistShow", () => {
 
     it("renders a track", () => {
         const store = mockStore({
-            playlistDetails: Map({
+            playlistDetails: {
                 isLoading: false,
                 data: {
                     id: 6045750124,
@@ -85,7 +85,7 @@ describe("PlaylistShow", () => {
                     },
                 },
                 error: null
-            }) as PlaylistDetailsState,
+            } as PlaylistDetailsState,
         });
         render(
             <Provider store={store}>

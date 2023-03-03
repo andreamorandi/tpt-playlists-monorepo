@@ -33,22 +33,22 @@ const rootReducer = (state = initialState, action: Action) => {
   };
 };
 
-const transform = createTransform(
-  (inboundState) => {
-    const serialized = stringify(inboundState);
-    return serialized;
-  },
-  (outboundState) => {
-    const parsed = parse(outboundState);
-    return parsed;
-  },
-  { whitelist: ["playlists", "playlistDetails"] }
-);
+// const transform = createTransform(
+//   (inboundState) => {
+//     const serialized = stringify(inboundState);
+//     return serialized;
+//   },
+//   (outboundState) => {
+//     const parsed = parse(outboundState);
+//     return parsed;
+//   },
+//   { whitelist: ["playlists", "playlistDetails"] }
+// );
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  transforms: [transform],
+  // transforms: [transform],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

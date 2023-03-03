@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import PlaylistList from "../PlaylistList";
 import { PlaylistsState } from "core/types/playlists";
 import { Map } from "immutable";
+import { SerializedError } from "@reduxjs/toolkit";
 
 const mockStore = configureMockStore([thunk]);
 
@@ -14,11 +15,11 @@ describe("PlaylistList", () => {
 
     it("renders 8 loading skeletons", () => {
         const store = mockStore({
-            playlists: Map({
+            playlists: {
                 isLoading: true,
                 data: {},
                 error: null
-            }) as PlaylistsState,
+            } as PlaylistsState,
         });
         render(
             <Provider store={store}>
@@ -31,11 +32,11 @@ describe("PlaylistList", () => {
 
     it("renders a fetching error message", () => {
         const store = mockStore({
-            playlists: Map({
+            playlists: {
                 isLoading: false,
                 data: {},
-                error: true
-            }) as PlaylistsState,
+                error: true as SerializedError
+            } as PlaylistsState,
         });
         render(
             <Provider store={store}>
@@ -48,7 +49,7 @@ describe("PlaylistList", () => {
 
     it("renders 2 list sections", () => {
         const store = mockStore({
-            playlists: Map({
+            playlists: {
                 isLoading: false,
                 data: {
                     data: [
@@ -73,7 +74,7 @@ describe("PlaylistList", () => {
                     ],
                 },
                 error: null
-            }) as PlaylistsState,
+            } as PlaylistsState,
         });
         render(
             <Provider store={store}>

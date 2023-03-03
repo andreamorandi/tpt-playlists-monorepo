@@ -21,13 +21,13 @@ const PlaylistShow: FC = () => {
     const { id } = useParams<{ id: string }>() || { id: '' };
 
     useEffect(() => {        
-        if (!playlistDetails.getIn(['data', 'id']) || playlistDetails.getIn(['data', 'id']) !== parseInt(id)) {
+        if (!playlistDetails.data.id || playlistDetails.data.id !== parseInt(id)) {
             dispatch(fetchPlaylistDetails(id));
         }
-    }, [id, playlistDetails, dispatch]);
+    }, [id, playlistDetails.data.id, dispatch]);
 
     let content: ReactNode;
-    if (playlistDetails.get('isLoading')) {
+    if (playlistDetails.isLoading) {
         content = (
             <div className="px-5 lg:px-10">
                 <div className="flex justify-start gap-10 mt-5">
@@ -39,18 +39,18 @@ const PlaylistShow: FC = () => {
                 </div>
             </div>
         );
-    } else if (playlistDetails.get('error')) {
+    } else if (playlistDetails.error) {
         content = (
             <div>C'è stato un errore nel caricamento delle tracce.</div>
         );
-    } else if (playlistDetails.getIn(['data', 'tracks'])) {
+    } else if (playlistDetails.data.tracks) {
         
-        const tracks: Track[] = playlistDetails.getIn(['data', 'tracks', 'data']) as Track[];
+        const tracks: Track[] = playlistDetails.data.tracks.data as Track[];
         const tracksList: List<Track> = List(tracks);
 
         content = (
             <>
-                <PlaylistShowHeader playlist={playlistDetails.get('data')} />
+                <PlaylistShowHeader playlist={playlistDetails.data} />
                 <main className="show">
                     <div className="ms_container">
                         <ul>{tracksList.map((track) => <li key={track.id}><PlaylistShowTrack track={track} /></li>)}</ul>

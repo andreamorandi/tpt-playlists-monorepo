@@ -53,12 +53,13 @@ export default PlaylistList;
 
 const styles = StyleSheet.create({
   slide: {
+    width: 160,
     marginLeft: 16,
   },
   image: {
     height: 160,
     width: 160,
-    borderRadius: 5,
+    borderRadius: 7,
   },
   title: {
     fontSize: 16,

@@ -12,7 +12,13 @@ export interface Playlists {
     data: Playlist[];
 }
 
-export interface PlaylistsState extends Map<string, any> {
+// export interface PlaylistsState extends Map<string, any> {
+//     isLoading: boolean;
+//     data: Playlists;
+//     error: SerializedError | null;
+// };
+
+export interface PlaylistsState {
     isLoading: boolean;
     data: Playlists;
     error: SerializedError | null;

@@ -8,8 +8,16 @@ import {RootState} from 'core/types/store';
 import {Track} from 'core/types/playlistDetails';
 import PlaylistShowHeader from './PlaylistShowHeader';
 import PlaylistShowTrack from './PlaylistShowTrack';
+import PlaylistShowLoading from './PlaylistShowLoading';
 import {PlaylistShowScreenProps} from './types/playlistShowScreen';
-import {View, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faChevronLeft} from '@fortawesome/free-solid-svg-icons';
 
@@ -25,21 +33,25 @@ const PlaylistShowScreen: FC<PlaylistShowScreenProps> = ({
 
   useEffect(() => {
     if (
-      !playlistDetails.getIn(['data', 'id']) ||
-      playlistDetails.getIn(['data', 'id']) !== parseInt(playlistId, 10)
+      !playlistDetails.data.id ||
+      playlistDetails.data.id !== parseInt(playlistId, 10)
     ) {
       dispatch(fetchPlaylistDetails(playlistId));
     }
-  }, [playlistId, playlistDetails, dispatch]);
+  }, [playlistId, playlistDetails.data.id, dispatch]);
 
   let content: ReactNode;
 
-  if (playlistDetails.getIn(['data', 'tracks'])) {
-    const tracks: Track[] = playlistDetails.getIn([
-      'data',
-      'tracks',
-      'data',
-    ]) as Track[];
+  if (playlistDetails.isLoading) {
+    content = (
+      <View style={styles.container}>
+        <PlaylistShowLoading />
+      </View>
+    );
+  } else if (playlistDetails.error) {
+    content = <Text>C'è stato un errore nel caricamento delle tracce.</Text>;
+  } else if (playlistDetails.data.tracks) {
+    const tracks: Track[] = playlistDetails.data.tracks.data as Track[];
     content = (
       <View style={styles.container}>
         <TouchableOpacity
@@ -47,7 +59,7 @@ const PlaylistShowScreen: FC<PlaylistShowScreenProps> = ({
           style={styles.back}>
           <FontAwesomeIcon icon={faChevronLeft} style={styles.backIcon} />
         </TouchableOpacity>
-        <PlaylistShowHeader playlist={playlistDetails.get('data')} />
+        <PlaylistShowHeader playlist={playlistDetails.data} />
         <FlatList
           data={tracks}
           renderItem={({item}) => <PlaylistShowTrack track={item} />}
@@ -62,8 +74,11 @@ const PlaylistShowScreen: FC<PlaylistShowScreenProps> = ({
   return <>{content || null}</>;
 };
 
+const windowHeight = Dimensions.get('window').height;
+
 const styles = StyleSheet.create({
   container: {
+    height: windowHeight,
     position: 'relative',
     flex: 1,
     paddingTop: 40,

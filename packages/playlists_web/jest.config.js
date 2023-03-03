@@ -5,7 +5,4 @@ module.exports = {
     coverageDirectory: 'coverage',
     testEnvironment: 'jsdom',
     setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-    // transform: {
-    //     "^.+\\.(ts|tsx)$": "babel-jest",
-    // }
 }

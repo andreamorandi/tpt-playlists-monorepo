@@ -37,7 +37,13 @@ export interface PlaylistDetails {
     };
 };
 
-export interface PlaylistDetailsState extends Map<string, any> {
+// export interface PlaylistDetailsState extends Map<string, any> {
+//     isLoading: boolean;
+//     data: PlaylistDetails;
+//     error: SerializedError | null;
+// };
+
+export interface PlaylistDetailsState {
     isLoading: boolean;
     data: PlaylistDetails;
     error: SerializedError | null;

@@ -8,6 +8,7 @@ import {selectPlaylists} from 'core/store/store';
 import {RootState} from 'core/types/store';
 import {Playlist} from 'core/types/playlists';
 import PlaylistList from './PlaylistList';
+import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
 import {PlaylistListScreenProps} from './types/playlistListScreen';
 import {View, Text, StyleSheet, Dimensions} from 'react-native';
 
@@ -16,18 +17,52 @@ const PlaylistListScreen: FC<PlaylistListScreenProps> = ({navigation}) => {
   const playlists = useSelector((state: RootState) => selectPlaylists(state));
 
   useEffect(() => {
-    if (!playlists.getIn(['data', 'data']) && !playlists.get('error')) {
+    if (!playlists.data.data && !playlists.error) {
       dispatch(fetchPlaylists());
     }
-  }, [playlists, dispatch]);
+  }, [playlists.data.data, dispatch, playlists.error]);
 
   let content: ReactNode;
 
-  if (playlists.getIn(['data', 'data'])) {
-    const playlistsData: Playlist[] = playlists.getIn([
-      'data',
-      'data',
-    ]) as Playlist[];
+  if (playlists.isLoading) {
+    content = (
+      <View style={styles.container}>
+        <View style={styles.playlistListSection}>
+          <Text style={styles.titleSection}>Le migliori playlist pop</Text>
+          <SkeletonPlaceholder
+            borderRadius={10}
+            backgroundColor="#202027"
+            highlightColor="#8a8b93">
+            <SkeletonPlaceholder.Item
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-evenly">
+              <SkeletonPlaceholder.Item width={160} height={160} />
+              <SkeletonPlaceholder.Item width={160} height={160} />
+            </SkeletonPlaceholder.Item>
+          </SkeletonPlaceholder>
+        </View>
+        <View style={styles.playlistListSection}>
+          <Text style={styles.titleSection}>Pop per ogni momento</Text>
+          <SkeletonPlaceholder
+            borderRadius={10}
+            backgroundColor="#202027"
+            highlightColor="#8a8b93">
+            <SkeletonPlaceholder.Item
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-evenly">
+              <SkeletonPlaceholder.Item width={160} height={160} />
+              <SkeletonPlaceholder.Item width={160} height={160} />
+            </SkeletonPlaceholder.Item>
+          </SkeletonPlaceholder>
+        </View>
+      </View>
+    );
+  } else if (playlists.error) {
+    content = <Text>C'è stato un errore nel caricamento delle playlist.</Text>;
+  } else if (playlists.data.data) {
+    const playlistsData: Playlist[] = playlists.data.data;
     const playlistList: List<Playlist> = List(playlistsData);
 
     const midpoint = Math.ceil(playlistList.size / 2);
@@ -38,14 +73,14 @@ const PlaylistListScreen: FC<PlaylistListScreenProps> = ({navigation}) => {
       <>
         <View style={styles.container}>
           <View style={styles.playlistListSection}>
-            <Text style={styles.sectionTitle}>Le migliori playlist pop</Text>
+            <Text style={styles.titleSection}>Le migliori playlist pop</Text>
             <PlaylistList
               playlists={playlistsFirstHalf}
               navigation={navigation}
             />
           </View>
           <View style={styles.playlistListSection}>
-            <Text style={styles.sectionTitle}>Pop per ogni momento</Text>
+            <Text style={styles.titleSection}>Pop per ogni momento</Text>
             <PlaylistList
               playlists={playlistsSecondHalf}
               navigation={navigation}
@@ -72,7 +107,7 @@ const styles = StyleSheet.create({
   playlistListSection: {
     paddingTop: 32,
   },
-  sectionTitle: {
+  titleSection: {
     fontSize: 28,
     fontWeight: '600',
     marginLeft: 16,
